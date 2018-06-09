@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kyka.demo.dao.LostThingDao">
+    <!--实现dao中的方法-->
+    <select id="queryLostThing" resultType="com.kyka.demo.entity.LostThing">
+        SELECT  lost_thing_id,name,place,
+        lost_time,description,contact_way
+        FROM lost_thing
+        ORDER BY lost_thing_id
+        DESC
+    </select>
+
+    <select id="querySchoolCard" resultType="com.kyka.demo.entity.LostThing">
+        SELECT  lost_thing_id,name,place,
+        lost_time,description,contact_way
+        FROM lost_thing
+        ORDER BY lost_thing_id
+        where type=1
+        DESC
+    </select>
+
+    <select id="queryCard" resultType="com.kyka.demo.entity.LostThing">
+        SELECT  lost_thing_id,name,place,
+        lost_time,description,contact_way
+        FROM lost_thing
+        ORDER BY lost_thing_id
+        where type=2
+        DESC
+    </select>
+
+    <select id="queryOthers" resultType="com.kyka.demo.entity.LostThing">
+        SELECT  lost_thing_id,name,place,
+        lost_time,description,contact_way
+        FROM lost_thing
+        ORDER BY lost_thing_id
+        where type=3
+        DESC
+    </select>
+
+    <!--在#{}中添加变量，但是只有一个变量所以可以随意命名-->
+    <select id="queryLostThingById" resultType="com.kyka.demo.entity.LostThing">
+      SELECT  lost_thing_id,name,place,
+        lost_time,description,contact_way
+        FROM lost_thing
+        WHERE
+        lost_thing_id=#{lostThingId}
+    </select>
+
+    <select id="queryLostThingByDescription" resultType="com.kyka.demo.entity.LostThing">
+      SELECT  lost_thing_id,name,place,
+        lost_time,description,contact_way
+        FROM lost_thing
+        WHERE
+        description=#{description}
+    </select>
+
+    <!--useGeneratedKeys:如果插入成功，可以返回主键值-->
+    <insert id="insertSchoolCard" useGeneratedKeys="true" keyProperty="lostThingId"
+            keyColumn="lost_thing_id" parameterType="com.kyka.demo.entity.LostThing">
+        INSERT INTO
+        lost_thing
+        (name,place,lost_time,description,
+        contact_way,type)
+        VALUES
+        (#{name},#{place},#{lostTime},#{description},#{contactWay},1)
+    </insert>
+
+    <insert id="insertCard" useGeneratedKeys="true" keyProperty="lostThingId"
+            keyColumn="lost_thing_id" parameterType="com.kyka.demo.entity.LostThing">
+        INSERT INTO
+        lost_thing
+        (name,place,lost_time,description,
+        contact_way,type)
+        VALUES
+        (#{name},#{place},#{lostTime},#{description},#{contactWay},2)
+    </insert>
+
+    <insert id="insertOthers" useGeneratedKeys="true" keyProperty="lostThingId"
+            keyColumn="lost_thing_id" parameterType="com.kyka.demo.entity.LostThing">
+        INSERT INTO
+        lost_thing
+        (name,place,lost_time,description,
+        contact_way,type)
+        VALUES
+        (#{name},#{place},#{lostTime},#{description},#{contactWay},3)
+    </insert>
+    <!--areaName类型必须为包装类-->
+    <!--注意逗号-->
+    <update id="updataLostThing" parameterType="com.kyka.demo.entity.LostThing">
+        UPDATE lost_thing
+        <set>
+            <if test="name!=null">name=#{name},</if>
+            <if test="place!=null">place=#{place},</if>
+            <if test="lostTime!=null">lost_time=#{lostTime},</if>
+            <if test="description!=null">description=#{description},</if>
+            <if test="contactWay!=null">contact_way=#{contactWay}</if>
+        </set>
+        WHERE lost_thing_id=#{lostThingId}
+    </update>
+
+    <delete id="deleteLostThing">
+        DELETE FROM
+        lost_thing
+        WHERE  lost_thing_id=#{lostThingId}
+    </delete>
+
+    <!--<select id="queryByTime" resultType="com.kyka.demo.entity.LostThing">-->
+        <!--SELECT  lost_thing_id,name,place,-->
+        <!--lost_time,description,contact_way-->
+        <!--FROM lost_thing-->
+        <!--WHERE-->
+        <!--lost_time>#{lostTime}-->
+    <!--</select>-->
+</mapper>
