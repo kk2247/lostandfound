@@ -48,7 +48,14 @@ public class LostThingDaoTest {
 
     @Test
     public void insertSchoolCard() {
-
+        LostThing lostThing=new LostThing();
+        lostThing.setContactWay("电话：110");
+        lostThing.setDescription("qqq");
+        lostThing.setLostTime(new Date());
+        lostThing.setName("雨伞");
+        lostThing.setPlace("饭堂");
+        lostThing.setPicturePath("1.jpg");
+        lostThingDao.insertOthers(lostThing);
     }
 
     @Test
@@ -79,6 +86,6 @@ public class LostThingDaoTest {
     @Test
     public void deleteLostThing() {
         int eff=lostThingDao.deleteLostThing(2);
-        assertEquals(1,3);
+        assertEquals(1,eff);
     }
 }

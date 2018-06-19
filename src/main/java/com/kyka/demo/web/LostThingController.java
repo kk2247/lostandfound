@@ -70,8 +70,8 @@ public class LostThingController {
     @RequestMapping(value = "/getlostbydescription", method = RequestMethod.GET)
     private Map<String,Object> getLostByDescription(String description){
         Map<String,Object> modelMap=new HashMap<String,Object>();
-        LostThing lostThing=lostThingService.queryLostThingByDescription(description);
-        modelMap.put("lost",lostThing);
+        List<LostThing> list=lostThingService.queryLostThingByDescription(description);
+        modelMap.put("lost",list);
         return modelMap;
     }
 
@@ -83,18 +83,19 @@ public class LostThingController {
         modelMap.put("success",lostThingService.insertSchoolCard(lostThing));
         return modelMap;
     }
+//    http://111.230.62.94:8080/lostandfound/superadmin/addschoolcard
 
     @RequestMapping(value = "/addcard", method = RequestMethod.POST)
     private Map<String,Object> addCard(@RequestBody LostThing lostThing) {
         Map<String,Object> modelMap=new HashMap<String,Object>();
-        modelMap.put("success",lostThingService.insertSchoolCard(lostThing));
+        modelMap.put("success",lostThingService.insertCard(lostThing));
         return modelMap;
     }
 
     @RequestMapping(value = "/addothers", method = RequestMethod.POST)
     private Map<String,Object> addOthers(@RequestBody LostThing lostThing) {
         Map<String,Object> modelMap=new HashMap<String,Object>();
-        modelMap.put("success",lostThingService.insertSchoolCard(lostThing));
+        modelMap.put("success",lostThingService.insertOthers(lostThing));
         return modelMap;
     }
 
@@ -105,10 +106,17 @@ public class LostThingController {
         return modelMap;
     }
 
-    @RequestMapping(value = "/removearea", method = RequestMethod.GET)
-    private Map<String,Object> removeArea(Integer lostThingId) {
+    @RequestMapping(value = "/removelost", method = RequestMethod.GET)
+    private Map<String,Object> removeLost(Integer lostThingId) {
         Map<String,Object> modelMap=new HashMap<String,Object>();
         modelMap.put("success",lostThingService.deleteLostThing(lostThingId));
+        return modelMap;
+    }
+
+    @RequestMapping(value = "/confirm", method = RequestMethod.GET)
+    private Map<String,Object> confirm(Integer lostThingId) {
+        Map<String,Object> modelMap=new HashMap<String,Object>();
+        modelMap.put("success",lostThingService.confirm(lostThingId));
         return modelMap;
     }
 
@@ -126,12 +134,12 @@ public class LostThingController {
             return result;
         }
 
-        String UPLOAD_FOLDER = "static/uploadfiles/";
+        String UPLOAD_FOLDER = "apache-tomcat-9.0.8/webapps/ROOT/img/";
 
         File dir = new File(UPLOAD_FOLDER);
+        String fileName=request.getParameter("user")+".jpg";
         if (!dir.isDirectory())
             dir.mkdirs();
-        String fileName=request.getParameter("lostId")+".jpg";
         try {
             File newFile=new File(UPLOAD_FOLDER + fileName);
             OutputStream writer=new FileOutputStream(newFile);

@@ -4,11 +4,12 @@ import com.kyka.demo.dao.LostThingDao;
 import com.kyka.demo.entity.LostThing;
 import com.kyka.demo.service.LostThingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 
-
+@Service
 public class LostThingServiceImpl implements LostThingService {
 
     @Autowired
@@ -44,18 +45,18 @@ public class LostThingServiceImpl implements LostThingService {
     }
 
     @Override
-    public LostThing queryLostThingByDescription(String description) {
+    public List<LostThing> queryLostThingByDescription(String description) {
         return lostThingDao.queryLostThingByDescription(description);
     }
 
     @Override
-    public boolean insertSchoolCard(LostThing lostThing) {
+    public int insertSchoolCard(LostThing lostThing) {
         if(lostThing.getName()!=null&& !"".equals(lostThing.getName())){
             lostThing.setLostTime(new Date());
             try{
                 int efficeedNum=lostThingDao.insertSchoolCard(lostThing);
                 if(efficeedNum>0){
-                    return true;
+                    return lostThing.getLostThingId();
                 }
                 else {
                     throw new RuntimeException("插入区域信息失败");
@@ -69,13 +70,13 @@ public class LostThingServiceImpl implements LostThingService {
     }
 
     @Override
-    public boolean insertCard(LostThing lostThing) {
+    public int insertCard(LostThing lostThing) {
         if(lostThing.getName()!=null&& !"".equals(lostThing.getName())){
             lostThing.setLostTime(new Date());
             try{
                 int efficeedNum=lostThingDao.insertCard(lostThing);
                 if(efficeedNum>0){
-                    return true;
+                    return lostThing.getLostThingId();
                 }
                 else {
                     throw new RuntimeException("插入区域信息失败");
@@ -89,13 +90,13 @@ public class LostThingServiceImpl implements LostThingService {
     }
 
     @Override
-    public boolean insertOthers(LostThing lostThing) {
+    public int insertOthers(LostThing lostThing) {
         if(lostThing.getName()!=null&& !"".equals(lostThing.getName())){
             lostThing.setLostTime(new Date());
             try{
                 int efficeedNum=lostThingDao.insertOthers(lostThing);
                 if(efficeedNum>0){
-                    return true;
+                    return lostThing.getLostThingId();
                 }
                 else {
                     throw new RuntimeException("插入区域信息失败");
@@ -144,5 +145,14 @@ public class LostThingServiceImpl implements LostThingService {
         }else{
             throw new RuntimeException("信息不能为空");
         }
+    }
+
+    @Override
+    public boolean confirm(int lostThingId) {
+        int eff=lostThingDao.confirm(lostThingId);
+        if(eff>0){
+            return true;
+        }
+        return false;
     }
 }

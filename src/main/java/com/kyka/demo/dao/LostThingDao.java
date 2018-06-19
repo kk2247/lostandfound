@@ -11,10 +11,11 @@ public interface LostThingDao {
     List<LostThing> queryCard();
     List<LostThing> queryOthers();
     LostThing queryLostThingById(int lostThingId);
-    LostThing queryLostThingByDescription(String description);
+    List<LostThing> queryLostThingByDescription(String description);
     int insertSchoolCard(LostThing lostThing);
     int insertCard(LostThing lostThing);
     int insertOthers(LostThing lostThing);
     int updataLostThing(LostThing lostThing);
     int deleteLostThing(int lostThingId);
+    int confirm(int lostThingId);
 }
